@@ -1,145 +1,270 @@
-# 👁️ ANEYE
+<div align="center">
 
-> **AI-Powered Retinal Disease Analysis Platform for Early Ophthalmic Screening**
+# 👁️ AnEye
 
-![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red?logo=pytorch)
-![Status](https://img.shields.io/badge/Status-Active%20Development-success)
-![License](https://img.shields.io/badge/License-MIT-green)
+### AI-Powered Retinal Disease Analysis Platform for Early Ophthalmic Screening
 
----
-
-## Overview
-
-ANEYE is an AI-powered retinal disease analysis platform designed to assist in the early screening of ophthalmic diseases from retinal fundus images.
-
-The project combines deep learning, medical image preprocessing, and modular AI engineering to build a scalable and research-ready clinical decision support system. It is currently built around an EfficientNet baseline and is designed to evolve into a comprehensive retinal intelligence platform with explainable AI and anatomical reasoning.
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
+![AI](https://img.shields.io/badge/AI-Vision%20Transformer-purple?style=for-the-badge)
 
 ---
 
-## Current Features
+**AnEye is an AI-assisted retinal disease screening platform designed to support early ophthalmic diagnosis using deep learning, explainable AI, and retinal biomarker analysis.**
 
-- ✅ ODIR-5K retinal dataset integration
-- ✅ Automated dataset validation pipeline
-- ✅ Metadata generation and label management
-- ✅ Medical image preprocessing
-- ✅ EfficientNet-B0 baseline classifier
-- ✅ Class-balanced model training
-- ✅ Evaluation pipeline (Accuracy, Precision, Recall, F1 Score)
-- ✅ Retinal disease inference engine
-- ✅ Confidence estimation
-- ✅ Clinical recommendation generation
+</div>
 
 ---
 
-## Supported Diseases
+# 📖 Overview
 
-- Normal
-- Cataract
+AnEye is a research-oriented intelligent eye disease screening platform that combines modern computer vision, explainable AI, retinal biomarker extraction, and deep learning to detect retinal diseases from fundus images.
+
+The platform is designed to assist clinicians by providing:
+
+- Disease prediction
+- Severity estimation
+- Explainable AI visualizations
+- Retinal biomarker measurements
+- Clinical recommendation support
+
+---
+
+# ✨ Features
+
+## 🧠 AI Disease Detection
+
+- Vision Transformer (ViT)
+- RETFound pretrained backbone
+- Multi-class retinal disease classification
+- Confidence scoring
+
+Supported diseases:
+
 - Diabetic Retinopathy
 - Glaucoma
-- Age-related Macular Degeneration (AMD)
+- Age Related Macular Degeneration
+- Cataract
 - Hypertensive Retinopathy
-- Myopia
-- Other Retinal Diseases
+- Macular Edema
+- Retinal Vein Occlusion
+- Healthy Retina
 
 ---
 
-## Project Structure
+## 🔬 Explainable AI
+
+- Grad-CAM++
+- Attention Maps
+- Saliency Visualization
+- Clinical Region Highlighting
+
+---
+
+## 👁 Retinal Biomarker Extraction
+
+Automatically measures
+
+- Cup-to-Disc Ratio
+- Vessel Density
+- Vessel Tortuosity
+- Exudate Area
+- Hemorrhage Count
+- Microaneurysm Count
+- Drusen Area
+- Optic Disc Measurements
+
+---
+
+## 📊 Severity Analysis
+
+- Mild
+- Moderate
+- Severe
+- Proliferative
+
+Disease progression tracking included.
+
+---
+
+## 🤖 Clinical Decision Support
+
+Provides
+
+- Risk Assessment
+- Referral Recommendation
+- Follow-up Suggestions
+- Confidence Score
+
+---
+
+# 🏗 System Architecture
 
 ```text
-AnEye/
-├── ai/
-│   ├── datasets/
-│   ├── preprocessing/
-│   ├── training/
-│   ├── evaluation/
-│   ├── inference/
-│   └── models/
-│
-├── backend/
-├── frontend/
-├── datasets/
-├── docs/
-├── research/
-├── scripts/
-└── tests/
+Fundus Image
+      │
+      ▼
+Image Enhancement
+      │
+      ▼
+Retinal Segmentation
+      │
+      ▼
+Biomarker Extraction
+      │
+      ▼
+Vision Transformer
+      │
+      ▼
+Disease Classification
+      │
+      ▼
+Explainable AI
+      │
+      ▼
+Clinical Report
 ```
 
 ---
 
-## Baseline Performance
+# 🧬 AI Pipeline
 
-| Metric | Score |
-|---------|--------|
-| Accuracy | **78.73%** |
-| Precision | **80.71%** |
-| Recall | **78.73%** |
-| F1 Score | **78.88%** |
+```
+Input Fundus Image
 
----
+↓
 
-## Technology Stack
+GAN Image Enhancement
 
-- Python
-- PyTorch
-- TorchVision
-- OpenCV
-- NumPy
-- Pandas
-- scikit-learn
+↓
 
----
+U-Net Segmentation
 
-## Current AI Pipeline
+↓
 
-```text
-Retinal Fundus Image
-        │
-        ▼
-Image Validation
-        │
-        ▼
-Preprocessing
-        │
-        ▼
-EfficientNet-B0
-        │
-        ▼
-Disease Classification
-        │
-        ▼
-Confidence Estimation
-        │
-        ▼
+Biomarker Extraction
+
+↓
+
+Vision Transformer
+
+↓
+
+Disease Prediction
+
+↓
+
+Severity Grading
+
+↓
+
+Explainable AI
+
+↓
+
 Clinical Recommendation
 ```
 
 ---
 
-## Future Roadmap
+# 🛠 Tech Stack
 
-The platform is being developed toward a research-oriented retinal AI framework with planned support for:
-
-- RETFound foundation model
-- Image Quality Assessment
-- CycleGAN-based image enhancement
-- Anatomical segmentation
-- Biomarker extraction
-- Vessel graph representation
-- Anatomy-aware feature fusion
-- Multi-task learning
-- Explainable AI
-- FastAPI backend
-- React frontend
+| Category | Technology |
+|-----------|------------|
+| Backend | FastAPI |
+| AI Framework | PyTorch |
+| Computer Vision | OpenCV |
+| Explainability | GradCAM |
+| Segmentation | U-Net |
+| Transformer | Vision Transformer |
+| Database | PostgreSQL |
+| Frontend | React |
+| Deployment | Docker |
 
 ---
 
-## Disclaimer
+# 📂 Project Structure
 
-ANEYE is an academic and research project intended for educational purposes only. It is **not** a medical device and should not be used for clinical diagnosis.
+```
+AnEye/
+
+├── backend/
+│   ├── api/
+│   ├── models/
+│   ├── inference/
+│   ├── segmentation/
+│   ├── biomarkers/
+│   ├── xai/
+│   └── reports/
+│
+├── frontend/
+│   ├── src/
+│   ├── components/
+│   └── assets/
+│
+├── datasets/
+├── notebooks/
+├── weights/
+├── docs/
+└── README.md
+```
 
 ---
+
+# 📈 Roadmap
+
+- [x] Disease Classification
+- [x] Explainable AI
+- [x] Biomarker Extraction
+- [ ] Clinical Dashboard
+- [ ] Progress Tracking
+- [ ] Doctor Portal
+- [ ] Multi-language Reports
+- [ ] Cloud Deployment
+
+---
+
+# 📚 Datasets
+
+The project utilizes publicly available retinal datasets including:
+
+- APTOS 2019
+- IDRiD
+- MESSIDOR-2
+- PAPILA
+- REFUGE
+- OCTID
+- EyePACS
+
+---
+
+# 📄 Research Motivation
+
+Millions of people worldwide suffer from preventable blindness due to delayed diagnosis of retinal diseases.
+
+AnEye aims to bridge the gap between AI and ophthalmology by providing an explainable, biomarker-aware, clinician-friendly screening platform.
+
+---
+
+# 👨‍💻 Author
+
+**Ashish Ranjan**
+
+AI Research • Computer Vision • Deep Learning
+
+GitHub: https://github.com/Ashish-Ranjan11
+
+LinkedIn: https://www.linkedin.com/in/ashish-ranjan-77a422371
+
+---
+
+<div align="center">
+
+### ⭐ If you like this project, consider giving it a star ⭐
+
+</div>
 
 ## License
 
