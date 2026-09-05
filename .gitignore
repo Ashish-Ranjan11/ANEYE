@@ -52,3 +52,23 @@ Thumbs.db
 # Temporary
 # ===========================
 *.log
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+datasets/
+results/
+artifacts/
+
+frontendnetraai-demo/node_modules/
+frontendnetraai-demo/dist/
+
+.env
+.env.*
+
+# Local development backups / debug artifacts
+*_backup.*
+*_before_*
+src_backup_*/
+build-error.txt
