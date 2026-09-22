@@ -72,3 +72,5 @@ frontendnetraai-demo/dist/
 *_before_*
 src_backup_*/
 build-error.txt
+
+nationals/simulink/NetraAI_DigitalTwin_V7_Working.mdl
