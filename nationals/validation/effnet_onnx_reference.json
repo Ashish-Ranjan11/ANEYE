@@ -1,0 +1,17 @@
+{
+  "model": "EfficientNet-B0",
+  "checkpoint": "C:\\Users\\kaustav\\ANEYE\\checkpoints\\sih_dr\\grading\\global_final.pth",
+  "test_image": "000c1434d8d7",
+  "image_size": 384,
+  "grade": 2,
+  "grade_confidence": 0.865329921245575,
+  "grade_probabilities": [
+    0.0011715294094756246,
+    0.02565327100455761,
+    0.865329921245575,
+    0.01581592671573162,
+    0.09202933311462402
+  ],
+  "rdr_probability": 0.9926317930221558,
+  "referable_dr": true
+}

@@ -1,0 +1,56 @@
+{
+  "version": "ADVANCED_EVIDENCE_V1",
+  "best_epoch": 8,
+  "best_validation_selection_score": 0.7964016203508015,
+  "labels": [
+    "VB_IRMA",
+    "NV",
+    "VH"
+  ],
+  "image_size": 512,
+  "train_cases": 7559,
+  "validation_cases": 1334,
+  "untouched_test_cases": 2225,
+  "test_metrics": {
+    "VB_IRMA": {
+      "auroc": 0.9320657387078208,
+      "aupr": 0.2914182902245812,
+      "sensitivity": 0.813953488372093,
+      "specificity": 0.8927589367552704,
+      "f1": 0.22435897435897437,
+      "tp": 35,
+      "tn": 1948,
+      "fp": 234,
+      "fn": 8,
+      "threshold": 0.5
+    },
+    "NV": {
+      "auroc": 0.9784275523992081,
+      "aupr": 0.82742243018239,
+      "sensitivity": 0.859504132231405,
+      "specificity": 0.9657794676806084,
+      "f1": 0.7003367003367004,
+      "tp": 104,
+      "tn": 2032,
+      "fp": 72,
+      "fn": 17,
+      "threshold": 0.5
+    },
+    "VH": {
+      "auroc": 0.9854581465652038,
+      "aupr": 0.8367796258434874,
+      "sensitivity": 0.8679245283018868,
+      "specificity": 0.9811233885819521,
+      "f1": 0.6571428571428571,
+      "tp": 46,
+      "tn": 2131,
+      "fp": 41,
+      "fn": 7,
+      "threshold": 0.5
+    },
+    "macro_auroc": 0.9653171458907442,
+    "macro_aupr": 0.6518734487501529,
+    "selection_score": 0.7615787427493599
+  },
+  "note": "0.5 thresholds are preliminary. Per-label thresholds will be locked using validation data after training."
+}
