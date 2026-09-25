@@ -1,5 +1,5 @@
-import NetraAIV9Workspace from "../components/NetraAIV9Workspace";
+import EngineWorkspaceMVP from "../components/EngineWorkspaceMVP";
 
 export default function EnginePage() {
-  return <NetraAIV9Workspace />;
+  return <EngineWorkspaceMVP />;
 }
