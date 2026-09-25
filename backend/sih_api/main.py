@@ -231,11 +231,12 @@ app.add_middleware(
     CORSMiddleware,
 
     allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+],
+    
 
     allow_credentials=True,
     allow_methods=["*"],
@@ -281,8 +282,11 @@ def health():
         "lesion_model":
             LESION_CHECKPOINT.exists(),
 
-        "structural_layer":\n            structure_engine is not None,\n\n        "quality_gate": "focus + illumination + contrast + FOV",\n        "borderline_enhancement": "CLAHE in LAB; accepted only if quality improves",\n        "workflow_contract": "NETRAAI_V9",\n    }
-
+                "structural_layer": structure_engine is not None,
+        "quality_gate": "focus + illumination + contrast + FOV",
+        "borderline_enhancement": "CLAHE in LAB; accepted only if quality improves",
+        "workflow_contract": "NETRAAI_V9",
+    }
 
 @app.post("/api/analyze")
 def analyze_fundus(
@@ -428,8 +432,13 @@ def analyze_fundus(
             {}
         )["report"] = str(report_path)
 
-        result = attach_v9_contract(\n            result\n        )\n\n        result = prepare_response(\n            result\n        )
+        result = attach_v9_contract(
+            result
+        )
 
+        result = prepare_response(
+            result
+        )
         result["source"] = {
             "original_filename":
                 file.filename,

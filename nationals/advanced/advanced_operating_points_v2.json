@@ -1,0 +1,103 @@
+{
+  "version": "ADVANCED_OPERATING_POINTS_V2",
+  "labels": [
+    "VB_IRMA",
+    "NV",
+    "VH"
+  ],
+  "selection_split": "validation",
+  "test_labels_used_for_selection": false,
+  "alert_policy": "SENSITIVITY_CONSTRAINED",
+  "alert_sensitivity_target": 0.9,
+  "confirm_policy": "MAX_F1_VALIDATION_ONLY",
+  "interpretation": {
+    "alert": "Engineering safety-alert operating point. Designed to reduce missed advanced evidence and may trigger human review.",
+    "confirm": "Higher-confidence corroborative evidence operating point selected by validation F1."
+  },
+  "operating_points": {
+    "VB_IRMA": {
+      "alert_threshold": 0.3149537742137909,
+      "confirm_threshold": 0.9841212034225464,
+      "validation_alert_metrics": {
+        "threshold": 0.3149537742137909,
+        "sensitivity": 0.9032258064516129,
+        "specificity": 0.8710667689946278,
+        "precision": 0.14285714285714285,
+        "npv": 0.9973637961335676,
+        "f1": 0.24669603524229072,
+        "tp": 28,
+        "tn": 1135,
+        "fp": 168,
+        "fn": 3
+      },
+      "validation_confirm_metrics": {
+        "threshold": 0.9841212034225464,
+        "sensitivity": 0.2903225806451613,
+        "specificity": 0.9961627014581734,
+        "precision": 0.6428571428571429,
+        "npv": 0.9833333333333333,
+        "f1": 0.4,
+        "tp": 9,
+        "tn": 1298,
+        "fp": 5,
+        "fn": 22
+      }
+    },
+    "NV": {
+      "alert_threshold": 0.1874670088291168,
+      "confirm_threshold": 0.9460982084274292,
+      "validation_alert_metrics": {
+        "threshold": 0.1874670088291168,
+        "sensitivity": 0.90625,
+        "specificity": 0.9448818897637795,
+        "precision": 0.453125,
+        "npv": 0.9950248756218906,
+        "f1": 0.6041666666666666,
+        "tp": 58,
+        "tn": 1200,
+        "fp": 70,
+        "fn": 6
+      },
+      "validation_confirm_metrics": {
+        "threshold": 0.9460982084274292,
+        "sensitivity": 0.71875,
+        "specificity": 0.9858267716535433,
+        "precision": 0.71875,
+        "npv": 0.9858267716535433,
+        "f1": 0.71875,
+        "tp": 46,
+        "tn": 1252,
+        "fp": 18,
+        "fn": 18
+      }
+    },
+    "VH": {
+      "alert_threshold": 0.8730345368385315,
+      "confirm_threshold": 0.8730345368385315,
+      "validation_alert_metrics": {
+        "threshold": 0.8730345368385315,
+        "sensitivity": 0.9166666666666666,
+        "specificity": 0.9976671850699844,
+        "precision": 0.9361702127659575,
+        "npv": 0.9968919968919969,
+        "f1": 0.9263157894736843,
+        "tp": 44,
+        "tn": 1283,
+        "fp": 3,
+        "fn": 4
+      },
+      "validation_confirm_metrics": {
+        "threshold": 0.8730345368385315,
+        "sensitivity": 0.9166666666666666,
+        "specificity": 0.9976671850699844,
+        "precision": 0.9361702127659575,
+        "npv": 0.9968919968919969,
+        "f1": 0.9263157894736843,
+        "tp": 44,
+        "tn": 1283,
+        "fp": 3,
+        "fn": 4
+      }
+    }
+  }
+}

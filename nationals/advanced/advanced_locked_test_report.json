@@ -1,0 +1,88 @@
+{
+  "version": "ADVANCED_LOCKED_TEST_REPORT_V1",
+  "threshold_contract_version": "ADVANCED_THRESHOLDS_V1",
+  "threshold_selection_split": "validation",
+  "threshold_selection_policy": "MAX_F1_VALIDATION_ONLY",
+  "test_labels_used_for_threshold_selection": false,
+  "test_previously_evaluated_at_default_0_5_threshold": true,
+  "test_cases": 2225,
+  "labels": [
+    "VB_IRMA",
+    "NV",
+    "VH"
+  ],
+  "thresholds": {
+    "VB_IRMA": 0.9841212034225464,
+    "NV": 0.9460982084274292,
+    "VH": 0.8730345368385315
+  },
+  "metrics": {
+    "VB_IRMA": {
+      "threshold": 0.9841212034225464,
+      "prevalence": 0.019325842696629212,
+      "auroc": 0.9320657387078208,
+      "aupr": 0.2914182902245812,
+      "sensitivity": 0.20930232558139536,
+      "specificity": 0.9967919340054996,
+      "precision": 0.5625,
+      "npv": 0.9846084200995926,
+      "f1": 0.30508474576271183,
+      "balanced_accuracy": 0.6030471297934474,
+      "youden_j": 0.20609425958689487,
+      "tp": 9,
+      "tn": 2175,
+      "fp": 7,
+      "fn": 34
+    },
+    "NV": {
+      "threshold": 0.9460982084274292,
+      "prevalence": 0.05438202247191011,
+      "auroc": 0.9784275523992081,
+      "aupr": 0.82742243018239,
+      "sensitivity": 0.7603305785123967,
+      "specificity": 0.9866920152091255,
+      "precision": 0.7666666666666667,
+      "npv": 0.9862232779097387,
+      "f1": 0.7634854771784233,
+      "balanced_accuracy": 0.8735112968607611,
+      "youden_j": 0.7470225937215222,
+      "tp": 92,
+      "tn": 2076,
+      "fp": 28,
+      "fn": 29
+    },
+    "VH": {
+      "threshold": 0.8730345368385315,
+      "prevalence": 0.023820224719101123,
+      "auroc": 0.9854581465652038,
+      "aupr": 0.8367796258434874,
+      "sensitivity": 0.8301886792452831,
+      "specificity": 0.9930939226519337,
+      "precision": 0.7457627118644068,
+      "npv": 0.9958448753462604,
+      "f1": 0.7857142857142858,
+      "balanced_accuracy": 0.9116413009486084,
+      "youden_j": 0.8232826018972168,
+      "tp": 44,
+      "tn": 2157,
+      "fp": 15,
+      "fn": 9
+    }
+  },
+  "macro": {
+    "auroc": 0.9653171458907442,
+    "aupr": 0.6518734487501529,
+    "sensitivity": 0.5999405277796918,
+    "specificity": 0.9921926239555198,
+    "precision": 0.6916431261770244,
+    "f1": 0.6180948362184736,
+    "balanced_accuracy": 0.7960665758676058
+  },
+  "provenance": {
+    "validation_predictions": "C:\\Users\\kaustav\\ANEYE\\nationals\\advanced\\advanced_validation_predictions_raw.csv",
+    "threshold_contract": "C:\\Users\\kaustav\\ANEYE\\nationals\\advanced\\advanced_thresholds_v1.json",
+    "test_predictions": "C:\\Users\\kaustav\\ANEYE\\nationals\\advanced\\advanced_test_predictions_raw.csv",
+    "checkpoint": "C:\\Users\\kaustav\\ANEYE\\checkpoints\\sih_dr\\advanced\\advanced_final.pth"
+  },
+  "interpretation_note": "The held-out test set was not used to select thresholds. However, it had previously been evaluated at the default 0.5 threshold during the original training workflow."
+}

@@ -29,6 +29,12 @@ import "../mvp-workstation.css";
 
 const API = "http://127.0.0.1:8000";
 
+const ADVANCED_META = {
+  VB_IRMA: { full: "Venous beading / IRMA", note: "Safety-routing evidence; current detector is not quadrant-aware." },
+  NV: { full: "Neovascularization", note: "Advanced proliferative evidence channel." },
+  VH: { full: "Vitreous hemorrhage", note: "Advanced hemorrhagic evidence channel." },
+};
+
 const LESION_META = {
   MA: {
     full: "Microaneurysms",
@@ -114,6 +120,24 @@ function pct(v, digits = 1) {
 
 function directPct(v, digits = 1) {
   return `${Number(v || 0).toFixed(digits)}%`;
+}
+
+function advancedEvidence(result, key) {
+  const e = result?.advanced_evidence?.evidence?.[key] || result?.advanced_evidence?.[key] || result?.advanced?.[key] || null;
+  if (!e) return null;
+  const raw = Number(e.raw_score ?? e.raw ?? e.score ?? 0);
+  const alert = Boolean(e.alert ?? e.alerted ?? false);
+  const confirmed = Boolean(e.confirmed ?? false);
+  const state = e.state || (confirmed ? "CONFIRMED" : alert ? "ALERT_ONLY" : "BELOW_ALERT");
+  return { ...e, raw, alert, confirmed, state };
+}
+
+function stabilityValue(result) {
+  return Number(result?.stability?.score ?? result?.stability_score ?? result?.t_score?.components?.stability ?? 0);
+}
+
+function calibratedRdr(result) {
+  return Number(result?.prediction?.rdr_probability_calibrated ?? result?.prediction?.calibrated_rdr_probability ?? result?.prediction?.rdr_probability ?? 0);
 }
 
 function artifact(path) {
@@ -1121,6 +1145,9 @@ export default function EngineWorkspaceMVP() {
   const [lockedRegion, setLockedRegion] = useState(null);
   const [hoverNode, setHoverNode] = useState(null);
   const [showPdf, setShowPdf] = useState(false);
+  const [reviewStartedAt, setReviewStartedAt] = useState(null);
+  const [reviewOutcome, setReviewOutcome] = useState(null);
+  const [reviewSeconds, setReviewSeconds] = useState(null);
   const inputRef = useRef();
 
   const activeRegion = lockedRegion || hoverRegion;
@@ -1199,12 +1226,20 @@ export default function EngineWorkspaceMVP() {
       }
 
       setResult(data);
+      setReviewStartedAt(null); setReviewOutcome(null); setReviewSeconds(null);
       setStage(data?.quality?.status === "UNGRADEABLE" ? "quality" : "global");
     } catch (err) {
       setError(err?.message || "Could not connect to the NetraAI backend.");
     } finally {
       setLoading(false);
     }
+  }
+
+  function recordReview(outcome) {
+    const start = reviewStartedAt || Date.now();
+    if (!reviewStartedAt) setReviewStartedAt(start);
+    setReviewSeconds(Math.max(0, (Date.now() - start) / 1000));
+    setReviewOutcome(outcome);
   }
 
   const stageAvailable = (id) => {
@@ -1220,6 +1255,10 @@ export default function EngineWorkspaceMVP() {
       : preview;
 
   const reportUrl = artifact(result?.artifacts?.report);
+
+  useEffect(() => {
+    if (stage === "decision" && result && !reviewStartedAt && !reviewOutcome) setReviewStartedAt(Date.now());
+  }, [stage, result, reviewStartedAt, reviewOutcome]);
 
   return (
     <div className="mvp-shell">
@@ -1443,13 +1482,14 @@ export default function EngineWorkspaceMVP() {
                 <Bar label="Contrast" value={result.quality.contrast * 100} note="Separation between vessels, lesions and retinal background." />
                 <Bar label="Retinal field-of-view" value={result.quality.fov * 100} note="How much usable retinal area is present." />
 
+                <div className="quality-safety-grid">
+                  <article><span>RESTORATION</span><strong>{result.quality.enhancement_applied ? "APPLIED" : "NOT REQUIRED"}</strong><p>{result.quality.enhancement_applied ? "Bounded CLAHE + illumination normalization are used to improve a borderline acquisition before reassessment." : "The acquisition passed without bounded restoration."}</p></article>
+                  <article><span>SAFETY ACTION</span><strong>{result.quality.status === "UNGRADEABLE" ? "RECAPTURE" : "CONTINUE"}</strong><p>{result.quality.status === "UNGRADEABLE" ? "Disease grading is blocked. Re-centre the retina, improve focus/illumination and reacquire sufficient retinal field-of-view." : "Quality is sufficient for the trained NetraAI V3 inference path."}</p></article>
+                </div>
+                {result.quality.reasons?.length > 0 && <div className="mvp-explainer warning"><AlertTriangle size={16}/><p><b>Recapture / quality guidance:</b> {result.quality.reasons.join(" · ")}</p></div>}
                 <div className="mvp-explainer">
                   <Info size={16} />
-                  <p>
-                    Prototype quality thresholds guide routing in this MVP.
-                    They are not presented as clinically validated acquisition
-                    thresholds.
-                  </p>
+                  <p>Quality is a safety gate, not a disease prediction. CLAHE and illumination normalization are bounded preprocessing steps; an image that remains ungradeable is never silently forced through ICDR grading.</p>
                 </div>
               </div>
             </div>
@@ -1486,7 +1526,7 @@ export default function EngineWorkspaceMVP() {
                 <strong>
                   {result.prediction.referable_dr ? "POSITIVE" : "NEGATIVE"}
                 </strong>
-                <b>{pct(result.prediction.rdr_probability, 2)}</b>
+                <b>{pct(calibratedRdr(result), 2)}</b>
                 <p>
                   In this prototype, Grade 2 or higher is treated as referable
                   diabetic retinopathy for screening workflow purposes.
@@ -1497,8 +1537,7 @@ export default function EngineWorkspaceMVP() {
                 <span>RAW GRADE CONFIDENCE</span>
                 <strong>{pct(result.prediction.grade_confidence, 2)}</strong>
                 <p>
-                  Temperature calibration has not yet been applied, so this
-                  value is displayed explicitly as raw model confidence.
+                  Grade confidence is shown separately from the calibrated referable-DR probability. NetraAI uses the calibrated RDR route for screening escalation when available.
                 </p>
               </div>
             </div>
@@ -2017,8 +2056,8 @@ export default function EngineWorkspaceMVP() {
                 <Bar label="XAI integrity" value={result.xai_integrity.score} />
                 <Bar
                   label="Stability term"
-                  value={90}
-                  note="Current prototype stability term; should be returned explicitly by the backend in the next iteration."
+                  value={stabilityValue(result)}
+                  note={result?.stability ? "Benign-transform consistency returned by the V3 engine." : "Stability value unavailable in this backend response."}
                 />
               </div>
 
@@ -2057,6 +2096,22 @@ export default function EngineWorkspaceMVP() {
                   </>
                 )}
               </div>
+            </div>
+
+            <div className="advanced-evidence-panel">
+              <div className="advanced-head"><span>ADVANCED SAFETY EVIDENCE</span><h3>Signals that can escalate review without pretending to be an autonomous diagnosis.</h3></div>
+              <div className="advanced-grid">
+                {Object.entries(ADVANCED_META).map(([key, meta]) => {
+                  const e = advancedEvidence(result, key);
+                  return <article key={key}>
+                    <div><b>{key.replace("_", "/")}</b><span>{meta.full}</span></div>
+                    <strong>{e ? e.raw.toFixed(3) : "—"}</strong>
+                    <em className={e?.confirmed ? "confirmed" : e?.alert ? "alert" : "quiet"}>{e?.state || "NOT RETURNED"}</em>
+                    <p>{meta.note}</p>
+                  </article>;
+                })}
+              </div>
+              {advancedEvidence(result,"VB_IRMA")?.alert && !advancedEvidence(result,"VB_IRMA")?.confirmed && <div className="mvp-explainer warning"><AlertTriangle size={16}/><p>VB/IRMA is an engineering safety alert only. Because this detector is not quadrant-aware, it does not independently establish severe NPDR or the clinical 4-2-1 rule.</p></div>}
             </div>
 
             <div className="trace-chain">
@@ -2098,6 +2153,15 @@ export default function EngineWorkspaceMVP() {
               <p>{result.recommendation.reason}</p>
             </div>
 
+            <div className="clinical-review-strip">
+              <div><span>HUMAN-IN-THE-LOOP REVIEW</span><strong>{reviewOutcome ? `${reviewOutcome} · ${reviewSeconds?.toFixed(1)} s` : "Review timer active"}</strong><small>Workflow timer supports evaluation of the &lt;30 s review goal; it is not itself clinical validation.</small></div>
+              <div>
+                <button onClick={() => recordReview("ACCEPTED")}>Accept AI assessment</button>
+                <button onClick={() => recordReview("OVERRIDDEN")}>Override</button>
+                <button onClick={() => recordReview("RECAPTURE REQUESTED")}>Request recapture</button>
+              </div>
+            </div>
+
             <div className="decision-summary">
               <Metric
                 label="ICDR severity"
@@ -2107,7 +2171,7 @@ export default function EngineWorkspaceMVP() {
               <Metric
                 label="Referable DR"
                 value={result.prediction.referable_dr ? "Positive" : "Negative"}
-                detail={`Probability ${pct(result.prediction.rdr_probability, 2)}`}
+                detail={`Calibrated probability ${pct(calibratedRdr(result), 2)}`}
               />
               <Metric
                 label="Image quality"

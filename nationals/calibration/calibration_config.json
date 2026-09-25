@@ -1,0 +1,63 @@
+{
+  "version": "NETRAAI_CALIBRATION_V1",
+  "checkpoint": "C:\\Users\\kaustav\\ANEYE\\checkpoints\\sih_dr\\grading\\global_final.pth",
+  "backbone": "efficientnet_b0",
+  "image_size": 384,
+  "split": {
+    "original_validation_cases": 733,
+    "calibration_fit_cases": 366,
+    "calibration_eval_cases": 367,
+    "seed": 2026,
+    "note": "Baseline checkpoint was originally selected using the full validation split. This deterministic subdivision is for prototype calibration evaluation, not an independent final clinical test."
+  },
+  "temperature": {
+    "grade": 0.7042824625968933,
+    "rdr": 1.2229175567626953
+  },
+  "rdr_operating_point": {
+    "threshold": 0.47500000000000003,
+    "selection": "PS_CONSTRAINED_YOUDEN",
+    "definition": "ICDR >= 2"
+  },
+  "grade_calibration": {
+    "before": {
+      "accuracy": 0.8010899182561307,
+      "nll": 0.6240673243858147,
+      "ece": 0.09277816556273119,
+      "brier": 0.31052141417580814
+    },
+    "after": {
+      "accuracy": 0.8010899182561307,
+      "nll": 0.6356084911760332,
+      "ece": 0.07838030923162478,
+      "brier": 0.30867894454574957
+    }
+  },
+  "rdr_calibration": {
+    "before": {
+      "nll": 0.20447593220198676,
+      "ece": 0.054285058785393664,
+      "brier": 0.059430798745779126,
+      "auroc": 0.9775875869712456,
+      "aupr": 0.9648384861538497
+    },
+    "after": {
+      "nll": 0.1880105805753959,
+      "ece": 0.050583240091017535,
+      "brier": 0.05757334540008034,
+      "auroc": 0.9775875869712456,
+      "aupr": 0.9648384861538497
+    }
+  },
+  "locked_threshold_eval": {
+    "threshold": 0.47500000000000003,
+    "tp": 142,
+    "tn": 199,
+    "fp": 19,
+    "fn": 7,
+    "sensitivity": 0.9530201342281879,
+    "specificity": 0.9128440366972477,
+    "ppv": 0.8819875776397516,
+    "npv": 0.9660194174757282
+  }
+}

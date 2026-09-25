@@ -1,0 +1,80 @@
+{
+  "version": "ADVANCED_THRESHOLDS_V1",
+  "selection_split": "validation",
+  "selection_policy": "MAX_F1_VALIDATION_ONLY",
+  "tie_breakers": [
+    "YOUDEN_J",
+    "SENSITIVITY",
+    "SPECIFICITY"
+  ],
+  "checkpoint": "C:\\Users\\kaustav\\ANEYE\\checkpoints\\sih_dr\\advanced\\advanced_final.pth",
+  "checkpoint_epoch": 8,
+  "backbone": "efficientnet_b0",
+  "image_size": 512,
+  "validation_cases": 1334,
+  "labels": [
+    "VB_IRMA",
+    "NV",
+    "VH"
+  ],
+  "thresholds": {
+    "VB_IRMA": 0.9841212034225464,
+    "NV": 0.9460982084274292,
+    "VH": 0.8730345368385315
+  },
+  "validation_metrics_at_locked_threshold": {
+    "VB_IRMA": {
+      "threshold": 0.9841212034225464,
+      "prevalence": 0.023238380809595203,
+      "auroc": 0.9495209566013914,
+      "aupr": 0.37024629461136593,
+      "sensitivity": 0.2903225806451613,
+      "specificity": 0.9961627014581734,
+      "precision": 0.6428571428571429,
+      "npv": 0.9833333333333333,
+      "f1": 0.4,
+      "balanced_accuracy": 0.6432426410516674,
+      "youden_j": 0.2864852821033348,
+      "tp": 9,
+      "tn": 1298,
+      "fp": 5,
+      "fn": 22
+    },
+    "NV": {
+      "threshold": 0.9460982084274292,
+      "prevalence": 0.047976011994003,
+      "auroc": 0.9843011811023622,
+      "aupr": 0.781441339630884,
+      "sensitivity": 0.71875,
+      "specificity": 0.9858267716535433,
+      "precision": 0.71875,
+      "npv": 0.9858267716535433,
+      "f1": 0.71875,
+      "balanced_accuracy": 0.8522883858267716,
+      "youden_j": 0.7045767716535432,
+      "tp": 46,
+      "tn": 1252,
+      "fp": 18,
+      "fn": 18
+    },
+    "VH": {
+      "threshold": 0.8730345368385315,
+      "prevalence": 0.035982008995502246,
+      "auroc": 0.9906849403836184,
+      "aupr": 0.9492775714836338,
+      "sensitivity": 0.9166666666666666,
+      "specificity": 0.9976671850699844,
+      "precision": 0.9361702127659575,
+      "npv": 0.9968919968919969,
+      "f1": 0.9263157894736843,
+      "balanced_accuracy": 0.9571669258683255,
+      "youden_j": 0.914333851736651,
+      "tp": 44,
+      "tn": 1283,
+      "fp": 3,
+      "fn": 4
+    }
+  },
+  "test_labels_used_for_threshold_selection": false,
+  "note": "Thresholds are operating points selected only on the validation split. They are not probability calibration."
+}

@@ -1,0 +1,39 @@
+{
+  "version": "GRADE0_LESION_CONFLICT_GATE_V1",
+  "score": "MAX_COMPOSITE_LESION_EVIDENCE",
+  "lesions": [
+    "MA",
+    "HE",
+    "EX",
+    "SE"
+  ],
+  "selection_partition": "APTOS_CALIBRATION_FIT",
+  "evaluation_partition": "APTOS_CALIBRATION_EVAL",
+  "selection_negative": "TRUE_GRADE_0",
+  "selection_positive": "TRUE_GRADES_2_TO_4_REFERABLE_DR",
+  "grade1_used_for_selection": false,
+  "specificity_target": 0.95,
+  "selection_policy": "SPECIFICITY_AT_LEAST_95_PERCENT_THEN_MAXIMIZE_REFERABLE_SENSITIVITY",
+  "threshold": 0.9543,
+  "fit_metrics": {
+    "threshold": 0.9543,
+    "sensitivity": 0.7785234899328859,
+    "specificity": 0.95,
+    "precision": 0.928,
+    "tp": 116,
+    "tn": 171,
+    "fp": 9,
+    "fn": 33
+  },
+  "claim": "Engineering discordance gate only. Not a lesion diagnostic threshold or clinical probability.",
+  "heldout_eval_metrics": {
+    "threshold": 0.9543,
+    "sensitivity": 0.7583892617449665,
+    "specificity": 0.9171270718232044,
+    "precision": 0.8828125,
+    "tp": 113,
+    "tn": 166,
+    "fp": 15,
+    "fn": 36
+  }
+}
