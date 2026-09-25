@@ -109,6 +109,46 @@ def prepare_response(result):
     return result
 
 
+def attach_v9_contract(result):
+    """Attach stable workflow metadata without inventing model evidence."""
+    quality = result.get("quality") or {}
+    prediction = result.get("prediction")
+    blocked = quality.get("status") == "UNGRADEABLE"
+
+    result["workflow"] = {
+        "version": "NETRAAI_V9",
+        "quality_first": True,
+        "classification_blocked": blocked,
+        "stages": [
+            "ACQUISITION", "QUALITY_GATE", "ADAPTIVE_ENHANCEMENT",
+            "GLOBAL_ICDR_RDR", "LESION_EVIDENCE", "RETINAL_ANATOMY",
+            "GRADCAM_XAI", "TRUST_CONCORDANCE", "TRACE_ROUTING", "REPORT"
+        ],
+    }
+
+    quality["enhancement_method"] = (
+        "CLAHE_LAB" if quality.get("enhancement_applied") else "ORIGINAL_RETAINED"
+    )
+    quality["safety_gate"] = "BLOCKED_RECAPTURE" if blocked else "PASSED"
+    result["quality"] = quality
+
+    if prediction is not None:
+        result["clinical_contract"] = {
+            "icdr_scale": "0-4",
+            "referable_definition": "ICDR >= 2",
+            "human_verification": "REQUIRED",
+        }
+
+    advanced = result.get("advanced_evidence")
+    if advanced is not None:
+        result["advanced_evidence_note"] = (
+            "Advanced evidence supports safety routing; ALERT/CONFIRMED states are not autonomous diagnoses. "
+            "VB/IRMA must not be interpreted as quadrant-aware 4-2-1 evidence unless explicitly provided by the model."
+        )
+
+    return result
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
@@ -241,9 +281,7 @@ def health():
         "lesion_model":
             LESION_CHECKPOINT.exists(),
 
-        "structural_layer":
-            structure_engine is not None,
-    }
+        "structural_layer":\n            structure_engine is not None,\n\n        "quality_gate": "focus + illumination + contrast + FOV",\n        "borderline_enhancement": "CLAHE in LAB; accepted only if quality improves",\n        "workflow_contract": "NETRAAI_V9",\n    }
 
 
 @app.post("/api/analyze")
@@ -390,9 +428,7 @@ def analyze_fundus(
             {}
         )["report"] = str(report_path)
 
-        result = prepare_response(
-            result
-        )
+        result = attach_v9_contract(\n            result\n        )\n\n        result = prepare_response(\n            result\n        )
 
         result["source"] = {
             "original_filename":
