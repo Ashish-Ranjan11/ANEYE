@@ -1190,6 +1190,52 @@ export default function EngineWorkspaceMVP() {
     }
   }
 
+  async function loadQualityDemo(mode) {
+    try {
+      setError("");
+      setResult(null);
+
+      const response = await fetch("/demo/grade0.png");
+      const sourceBlob = await response.blob();
+
+      let demoBlob = sourceBlob;
+      let name = "gradeable_quality_demo.png";
+
+      if (mode === "ungradeable") {
+        const bitmap = await createImageBitmap(sourceBlob);
+        const canvas = document.createElement("canvas");
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.filter = "brightness(8%) blur(12px)";
+        ctx.drawImage(bitmap, 0, 0);
+        bitmap.close?.();
+
+        demoBlob = await new Promise((resolve, reject) => {
+          canvas.toBlob(
+            (blob) => blob ? resolve(blob) : reject(new Error("Could not create degraded quality demo.")),
+            "image/png"
+          );
+        });
+
+        name = "ungradeable_quality_demo.png";
+      }
+
+      const demoFile = new File([demoBlob], name, {
+        type: "image/png",
+      });
+
+      setFile(demoFile);
+      setPreview(URL.createObjectURL(demoFile));
+      setStage("input");
+    } catch {
+      setError("Could not load the selected quality-gate demonstration.");
+    }
+  }
+
   function chooseFile(e) {
     const selected = e.target.files?.[0];
     if (!selected) return;
@@ -1227,7 +1273,13 @@ export default function EngineWorkspaceMVP() {
 
       setResult(data);
       setReviewStartedAt(null); setReviewOutcome(null); setReviewSeconds(null);
-      setStage(data?.quality?.status === "UNGRADEABLE" ? "quality" : "global");
+
+      const blocked =
+        data?.quality?.status === "UNGRADEABLE" ||
+        data?.workflow?.classification_blocked === true ||
+        data?.prediction == null;
+
+      setStage(blocked ? "quality" : "global");
     } catch (err) {
       setError(err?.message || "Could not connect to the NetraAI backend.");
     } finally {
@@ -1244,7 +1296,18 @@ export default function EngineWorkspaceMVP() {
 
   const stageAvailable = (id) => {
     if (id === "input") return true;
-    return Boolean(result);
+    if (!result) return false;
+
+    const blocked =
+      result?.quality?.status === "UNGRADEABLE" ||
+      result?.workflow?.classification_blocked === true ||
+      result?.prediction == null;
+
+    if (blocked) {
+      return id === "quality";
+    }
+
+    return true;
   };
 
   const displayedImage =
@@ -1426,6 +1489,37 @@ export default function EngineWorkspaceMVP() {
                   </div>
                 </button>
               ))}
+            </div>
+            <div className="mvp-demo-strip quality-demo-strip">
+              <div>
+                <span>TEST THE SAFETY GATE</span>
+                <h3>Image quality demonstrations</h3>
+                <p>
+                  The same retinal source is shown as an acceptable acquisition
+                  and as a deliberately degraded acquisition stress-test. The
+                  second image must be blocked before disease grading.
+                </p>
+              </div>
+
+              <button onClick={() => loadQualityDemo("gradeable")}>
+                <img src="/demo/grade0.png" alt="Gradeable retinal acquisition" />
+                <div>
+                  <strong>Gradeable acquisition</strong>
+                  <span>Quality gate · Continue screening</span>
+                </div>
+              </button>
+
+              <button onClick={() => loadQualityDemo("ungradeable")}>
+                <img
+                  src="/demo/grade0.png"
+                  alt="Deliberately degraded retinal acquisition"
+                  style={{ filter: "brightness(12%) blur(5px)" }}
+                />
+                <div>
+                  <strong>Ungradeable acquisition</strong>
+                  <span>Quality gate · Recapture required</span>
+                </div>
+              </button>
             </div>
           </section>
         )}
