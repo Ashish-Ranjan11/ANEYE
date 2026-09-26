@@ -353,6 +353,34 @@ def analyze_fundus(
             )
 
         # --------------------------------------------------
+        # CRITICAL QUALITY SAFETY GATE
+        # --------------------------------------------------
+        # An ungradeable acquisition must terminate the
+        # screening workflow before structural analysis,
+        # disease grading artifacts, or report generation.
+        if (
+            result.get("quality", {}).get("status") == "UNGRADEABLE"
+            or result.get("prediction") is None
+        ):
+            result = attach_v9_contract(
+                result
+            )
+
+            result = prepare_response(
+                result
+            )
+
+            result["source"] = {
+                "original_filename":
+                    file.filename,
+
+                "analysis_id":
+                    case_uuid,
+            }
+
+            return result
+
+        # --------------------------------------------------
         # STRUCTURAL RETINAL ANALYSIS
         # --------------------------------------------------
 
