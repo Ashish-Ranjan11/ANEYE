@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import "../mvp-workstation.css";
 
-const API = "https://netraai-api.onrender.com";
+const API = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
 
 const ADVANCED_META = {
   VB_IRMA: { full: "Venous beading / IRMA", note: "Safety-routing evidence; current detector is not quadrant-aware." },
@@ -2297,5 +2297,6 @@ export default function EngineWorkspaceMVP() {
     </div>
   );
 }
+
 
 
