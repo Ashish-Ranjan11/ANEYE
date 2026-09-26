@@ -141,7 +141,20 @@ function calibratedRdr(result) {
 }
 
 function artifact(path) {
-  return path ? `${API}${path}` : "";
+  if (!path) return "";
+
+  if (
+    path.startsWith("http://") ||
+    path.startsWith("https://") ||
+    path.startsWith("blob:") ||
+    path.startsWith("data:")
+  ) {
+    return path;
+  }
+
+  return path.startsWith("/")
+    ? `${API}${path}`
+    : `${API}/${path}`;
 }
 
 function getComponents(result) {
