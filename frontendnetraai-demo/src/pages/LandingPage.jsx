@@ -22,8 +22,9 @@ export default function LandingPage() {
           <a href="#why">Why NetraAI</a>
           <a href="#case">Live case</a>
           <a href="#architecture">Architecture</a>
+          <Link to="/digital-twin">Rural Digital Twin</Link>
         </div>
-        <Link className="judge-cta" to="/engine"><ScanEye size={16}/> Run engine</Link>
+        <div style={{display:"flex",gap:8}}><Link className="judge-cta" to="/engine"><ScanEye size={16}/> Clinical Workstation</Link><Link className="judge-cta" to="/digital-twin"><Radar size={16}/> Rural Digital Twin</Link></div>
       </nav>
 
       <section className="judge-hero">
@@ -33,7 +34,7 @@ export default function LandingPage() {
           <p className="hero-lead">NetraAI shows the image quality, the global grade, the local pathology, the explanation integrity and the trust behind every referral decision.</p>
           <div className="hero-actions">
             <Link to="/engine" className="primary-action">Open screening engine <ArrowRight size={17}/></Link>
-            <a href="#case" className="secondary-action">See one real case</a>
+            <Link to="/digital-twin" className="secondary-action">Explore Rural Digital Twin <ArrowRight size={17}/></Link>
           </div>
           <div className="hero-rule" />
           <div className="hero-capsules">
