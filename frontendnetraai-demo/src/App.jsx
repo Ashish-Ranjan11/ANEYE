@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 
 import LandingPage from "./pages/LandingPage";
 import EnginePage from "./pages/EnginePage";
+import DigitalTwinPage from "./pages/DigitalTwinPage";
 import LaunchScreen from "./components/LaunchScreen";
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/engine" element={<EnginePage />} />
+        <Route path="/digital-twin" element={<DigitalTwinPage />} />
       </Routes>
     </>
   );
