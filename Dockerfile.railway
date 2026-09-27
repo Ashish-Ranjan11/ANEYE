@@ -13,6 +13,36 @@ RUN python -m pip install --upgrade pip && \
 
 COPY . .
 
+# Railway's source snapshot contains Git LFS pointer stubs rather than the
+# checkpoint payloads. Materialize the two model files directly from GitHub LFS.
+RUN python - <<'PY'
+from pathlib import Path
+from urllib.request import urlopen
+
+files = {
+    Path("checkpoints/sih_dr/grading/global_final.pth"):
+        "https://media.githubusercontent.com/media/Ashish-Ranjan11/ANEYE/main/checkpoints/sih_dr/grading/global_final.pth",
+    Path("checkpoints/sih_dr/lesions/lesion_final.pth"):
+        "https://media.githubusercontent.com/media/Ashish-Ranjan11/ANEYE/main/checkpoints/sih_dr/lesions/lesion_final.pth",
+}
+expected = {
+    Path("checkpoints/sih_dr/grading/global_final.pth"): 16366283,
+    Path("checkpoints/sih_dr/lesions/lesion_final.pth"): 72269153,
+}
+for path, url in files.items():
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with urlopen(url, timeout=180) as response, path.open("wb") as out:
+        while True:
+            chunk = response.read(1024 * 1024)
+            if not chunk:
+                break
+            out.write(chunk)
+    size = path.stat().st_size
+    if size != expected[path]:
+        raise RuntimeError(f"{path}: expected {expected[path]} bytes, got {size}")
+    print(f"Materialized {path}: {size} bytes")
+PY
+
 EXPOSE 8000
 
-CMD ["sh", "-c", "uvicorn backend.sih_api.main:app --host 0.0.0.0 --port ${PORT}"]
+CMD ["uvicorn", "backend.sih_api.main:app", "--host", "0.0.0.0", "--port", "8000"]
