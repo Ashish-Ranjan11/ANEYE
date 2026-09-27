@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import "../mvp-workstation.css";
 
-const API = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? "https://netraai-api-production.up.railway.app" : "http://127.0.0.1:8000");
+const API = import.meta.env.PROD ? "https://netraai-api-production.up.railway.app" : (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000");
 
 const ADVANCED_META = {
   VB_IRMA: { full: "Venous beading / IRMA", note: "Safety-routing evidence; current detector is not quadrant-aware." },
@@ -417,11 +417,9 @@ function PdfPreview({ url, onClose }) {
 }
 
 
-const STRUCTURE_API_BASE =
-  import.meta.env.VITE_API_URL ||
-  (import.meta.env.PROD
-    ? "https://netraai-api-production.up.railway.app"
-    : "http://127.0.0.1:8000");
+const STRUCTURE_API_BASE = import.meta.env.PROD
+  ? "https://netraai-api-production.up.railway.app"
+  : (import.meta.env.VITE_API_URL || "http://127.0.0.1:8000");
 
 
 function structureArtifactUrl(path) {
