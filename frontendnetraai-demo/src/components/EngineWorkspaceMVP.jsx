@@ -419,7 +419,9 @@ function PdfPreview({ url, onClose }) {
 
 const STRUCTURE_API_BASE =
   import.meta.env.VITE_API_URL ||
-  "http://127.0.0.1:8000";
+  (import.meta.env.PROD
+    ? "https://netraai-api-production.up.railway.app"
+    : "http://127.0.0.1:8000");
 
 
 function structureArtifactUrl(path) {
