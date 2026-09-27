@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: netraai-api
+    runtime: python
+    branch: main
+    buildCommand: pip install -r requirements-backend.txt
+    startCommand: uvicorn backend.sih_api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
