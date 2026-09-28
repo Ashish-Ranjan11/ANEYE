@@ -10,7 +10,7 @@ export default function LandingFooter() {
 
           <div className="footer-logo-plate">
             <img
-              src="/netraai-logo.png"
+              src="/netraai-logo.webp"
               alt="NetraAI"
             />
           </div>
