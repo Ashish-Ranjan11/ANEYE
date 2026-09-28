@@ -76,7 +76,15 @@ class GlobalDRGradCAM:
 
         cam = torch.relu(cam)
 
-        cam = cam[0].cpu().numpy()
+        cam = cam[0].detach().cpu().numpy().copy()
+
+        # Hooks intentionally retain feature maps/gradients. Release them as
+        # soon as the heatmap has been materialized so they do not inflate the
+        # resident set while lesion/structural stages run.
+        self.activations = None
+        self.gradients = None
+        self.model.zero_grad(set_to_none=True)
+        del output, logits, score, weights
 
         cam -= cam.min()
 
