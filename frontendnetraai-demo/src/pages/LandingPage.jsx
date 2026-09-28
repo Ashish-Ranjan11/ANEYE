@@ -17,7 +17,7 @@ export default function LandingPage() {
   return (
     <div className="judge-page">
       <nav className="judge-nav">
-        <Link to="/" className="judge-logo"><img src="/netraai-logo.png" alt="NetraAI" /></Link>
+        <Link to="/" className="judge-logo"><img src="/netraai-logo.webp" alt="NetraAI" /></Link>
         <div className="judge-links">
           <a href="#why">Why NetraAI</a>
           <a href="#case">Live case</a>
@@ -118,7 +118,7 @@ export default function LandingPage() {
       </section>
 
       <section className="final-statement section-shell">
-        <img src="/netraai-logo.png" alt="NetraAI" />
+        <img src="/netraai-logo.webp" alt="NetraAI" />
         <h2>Make the model show its work.</h2>
         <p>Explainable diabetic-retinopathy screening for rural workflows, built around evidence rather than confidence alone.</p>
         <Link to="/engine" className="primary-action">Launch NetraAI <ArrowRight size={17}/></Link>
