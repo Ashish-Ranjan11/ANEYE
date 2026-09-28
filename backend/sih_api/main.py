@@ -334,6 +334,8 @@ def analyze_fundus(
         / f"{case_uuid}{suffix}"
     )
 
+    request_lock_acquired = False
+
     try:
 
         with open(
@@ -346,11 +348,16 @@ def analyze_fundus(
                 output
             )
 
-        with inference_lock:
+        # Serialize the complete heavy pipeline, not only the core DR model.
+        # Structural analysis/report generation also allocate large arrays; if
+        # another request starts model inference at the same time, the 1 GB
+        # Railway instance can be OOM-killed.
+        inference_lock.acquire()
+        request_lock_acquired = True
 
-            result = engine.analyze(
-                str(upload_path)
-            )
+        result = engine.analyze(
+            str(upload_path)
+        )
 
         # --------------------------------------------------
         # CRITICAL QUALITY SAFETY GATE
@@ -490,6 +497,12 @@ def analyze_fundus(
         )
 
     finally:
+
+        if request_lock_acquired:
+            try:
+                inference_lock.release()
+            except Exception:
+                pass
 
         try:
             file.file.close()
