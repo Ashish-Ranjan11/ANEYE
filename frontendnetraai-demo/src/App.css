@@ -2037,3 +2037,298 @@
 
 /* District deployment / Simulink story */
 .deployment-story{border-top:1px solid rgba(110,220,255,.16)}.deployment-head{display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end}.deployment-head h2{max-width:900px}.deployment-head p{max-width:760px}.deployment-status{min-width:230px;border:1px solid rgba(88,235,208,.28);padding:20px;background:rgba(5,25,29,.6)}.deployment-status span,.deployment-metrics span{display:block;font-size:10px;letter-spacing:.16em;color:#6ddff8}.deployment-status strong{display:block;font-size:28px;color:#75f1d3;margin:5px 0}.deployment-status small,.deployment-metrics small{color:#79949c}.deployment-flow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:38px 0 22px;padding:16px;border:1px solid rgba(109,223,248,.16);overflow:auto}.deployment-flow span{white-space:nowrap;font-size:11px;letter-spacing:.06em;color:#d9f7ff}.deployment-flow i{font-style:normal;color:#54d7f4}.deployment-metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.deployment-metrics article{padding:18px;border:1px solid rgba(109,223,248,.14);background:rgba(5,19,26,.55)}.deployment-metrics strong{display:block;font-size:27px;color:#f0fbff;margin:7px 0}.deployment-insights{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.deployment-insights article{padding:18px;background:rgba(7,26,34,.48);border:1px solid rgba(109,223,248,.12)}.deployment-insights b{font-size:11px;letter-spacing:.12em;color:#6ddff8}.deployment-insights p,.deployment-note{color:#7f9fa9;font-size:12px;line-height:1.6}.deployment-note{margin-top:15px}@media(max-width:900px){.deployment-head{grid-template-columns:1fr}.deployment-metrics{grid-template-columns:repeat(2,1fr)}.deployment-insights{grid-template-columns:1fr}}@media(max-width:600px){.deployment-metrics{grid-template-columns:1fr}}
+
+
+/* =========================================================
+   MOBILE FLOW + UPDATED NETRAAI BRANDING
+   Prevent fixed-height desktop hero containers from clipping/
+   overlapping the responsive RetinaStack on phones.
+   ========================================================= */
+
+.judge-logo img,
+.final-statement img,
+.footer-logo-plate img,
+.netra-launch-simple-logo {
+  object-fit: contain;
+}
+
+.footer-logo-plate {
+  background: #02070b !important;
+  border-color: rgba(107, 216, 242, .14) !important;
+}
+
+.netra-launch-simple {
+  background: #000 !important;
+}
+
+.netra-launch-simple-logo {
+  width: min(520px, 82vw) !important;
+  max-height: 190px !important;
+}
+
+@media (max-width: 760px) {
+  html,
+  body,
+  #root,
+  .judge-page {
+    overflow-x: clip;
+  }
+
+  .judge-nav {
+    width: calc(100% - 32px);
+    height: auto;
+    min-height: 94px;
+    padding: 16px 0;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .judge-logo {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .judge-logo img {
+    width: 118px !important;
+    height: auto;
+    max-height: 54px;
+    display: block;
+  }
+
+  .judge-nav > div:last-child {
+    margin-left: auto;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, .82fr);
+    gap: 8px !important;
+    width: min(60vw, 350px);
+  }
+
+  .judge-nav > div:last-child .judge-cta {
+    min-width: 0;
+    padding: 11px 10px;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .judge-hero {
+    display: block;
+    width: calc(100% - 32px);
+    min-height: 0;
+    padding: 62px 0 0;
+  }
+
+  .judge-hero-copy {
+    position: relative;
+    z-index: 2;
+  }
+
+  .judge-hero-copy h1 {
+    font-size: clamp(48px, 14vw, 72px);
+    line-height: .95;
+    margin: 24px 0 28px;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-lead {
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .hero-actions .primary-action,
+  .hero-actions .secondary-action {
+    width: 100%;
+    min-height: 56px;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+
+  .hero-capsules {
+    gap: 12px 18px;
+  }
+
+  .judge-hero-visual {
+    display: block !important;
+    width: 100%;
+    height: auto !important;
+    min-height: 0 !important;
+    margin-top: 64px;
+    overflow: visible;
+  }
+
+  .netra-hero-figure {
+    width: 100%;
+    margin: 0 auto 72px;
+  }
+
+  .netra-figure-kicker {
+    width: 100%;
+    margin: 0 0 14px;
+    padding: 0 4px;
+    flex-wrap: wrap;
+  }
+
+  .netra-figure-kicker i {
+    min-width: 40px;
+  }
+
+  .netra-figure-stage {
+    width: 100%;
+    height: auto !important;
+    padding: 22px 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+  }
+
+  .netra-connectors {
+    display: none;
+  }
+
+  .netra-retina-core {
+    position: relative;
+    left: auto;
+    top: auto;
+    transform: none;
+    width: min(100%, 340px);
+    height: auto;
+    aspect-ratio: 1;
+    margin: 6px auto 22px;
+    flex: 0 0 auto;
+  }
+
+  .netra-retina-image-wrap {
+    width: min(88vw, 310px);
+    height: min(88vw, 310px);
+    max-width: 310px;
+    max-height: 310px;
+  }
+
+  .netra-callout {
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+  }
+
+  .netra-callout-card {
+    min-height: 0;
+  }
+
+  .netra-figure-explanation {
+    width: 100%;
+    grid-template-columns: 1fr;
+    margin-top: 12px;
+  }
+
+  .netra-figure-explanation > div {
+    border-right: 0;
+    border-bottom: 1px solid rgba(126, 194, 216, .1);
+  }
+
+  .netra-figure-explanation > div:last-child {
+    border-bottom: 0;
+  }
+
+  .manifesto {
+    padding: 72px 0;
+    margin-top: 0;
+  }
+
+  .proof-section {
+    margin: 78px auto !important;
+  }
+
+  .proof-section + section {
+    margin-top: 72px !important;
+  }
+
+  .case-story {
+    padding: 56px 0 76px;
+  }
+
+  .architecture-editorial {
+    padding: 76px 0;
+    gap: 38px;
+  }
+
+  .final-statement {
+    padding: 80px 0 96px;
+  }
+
+  .final-statement img {
+    width: min(330px, 82vw) !important;
+    height: auto;
+    max-height: 150px;
+    margin: 0 auto 30px;
+    display: block;
+  }
+
+  .footer-final {
+    margin-top: 72px;
+  }
+
+  .footer-final-inner {
+    padding: 52px 0 42px;
+  }
+
+  .footer-logo-plate {
+    width: min(100%, 330px);
+    min-height: 96px;
+    padding: 12px 16px;
+  }
+
+  .footer-logo-plate img {
+    max-width: 280px !important;
+    max-height: 76px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .judge-nav {
+    width: calc(100% - 24px);
+  }
+
+  .judge-logo img {
+    width: 98px !important;
+  }
+
+  .judge-nav > div:last-child {
+    width: min(64vw, 270px);
+  }
+
+  .judge-nav > div:last-child .judge-cta {
+    padding: 10px 8px;
+    font-size: 10px;
+  }
+
+  .judge-nav > div:last-child .judge-cta svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .judge-hero {
+    width: calc(100% - 28px);
+    padding-top: 50px;
+  }
+
+  .judge-hero-copy h1 {
+    font-size: clamp(44px, 14vw, 62px);
+  }
+
+  .netra-retina-core {
+    width: min(100%, 300px);
+  }
+
+  .netra-retina-image-wrap {
+    width: min(82vw, 280px);
+    height: min(82vw, 280px);
+  }
+}
