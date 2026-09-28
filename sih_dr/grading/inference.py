@@ -72,7 +72,9 @@ class GlobalDRInference:
             self.image_size
         )
 
-        self.checkpoint = checkpoint
+        # Do not retain the full checkpoint dict after loading weights.
+        # Keeping it duplicates model state in RAM on constrained deployments.
+        del checkpoint
 
     def prepare(self, image_bgr):
 
