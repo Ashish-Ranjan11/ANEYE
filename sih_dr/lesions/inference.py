@@ -23,8 +23,8 @@ class LesionInferenceEngine:
         self,
         checkpoint_path,
         device=None,
-        tile_size=512,
-        stride=256,
+        tile_size=320,
+        stride=224,
         thresholds=None,
     ):
 
@@ -189,7 +189,7 @@ class LesionInferenceEngine:
     # FULL-RETINA INFERENCE
     # -------------------------------------------------------
 
-    @torch.no_grad()
+    @torch.inference_mode()
     def predict(
         self,
         image_bgr
@@ -248,14 +248,17 @@ class LesionInferenceEngine:
 
         h, w = image_rgb.shape[:2]
 
+        # Railway production has a 1 GB memory ceiling. Keep the stitched
+        # lesion accumulator compact: FP16 is sufficient for thresholding and
+        # confidence summaries, while uint8 safely stores overlap counts.
         probability_sum = np.zeros(
             (4, h, w),
-            dtype=np.float32
+            dtype=np.float16
         )
 
         coverage = np.zeros(
             (h, w),
-            dtype=np.float32
+            dtype=np.uint8
         )
 
         ys = self._positions(h)
@@ -327,6 +330,7 @@ class LesionInferenceEngine:
                     .float()
                     .cpu()
                     .numpy()
+                    .astype(np.float16, copy=False)
                 )
 
                 probability_sum[
@@ -338,7 +342,11 @@ class LesionInferenceEngine:
                 coverage[
                     y:y+self.tile_size,
                     x:x+self.tile_size
-                ] += 1.0
+                ] += 1
+
+                # Drop per-tile tensors immediately so CPU memory can be
+                # reclaimed before the next tile.
+                del tensor, logits, probs
 
                 used_tiles += 1
 
@@ -349,13 +357,18 @@ class LesionInferenceEngine:
         # Avoid division by zero
         valid_coverage = np.maximum(
             coverage,
-            1.0
+            1
         )
 
-        probabilities = (
-            probability_sum
-            / valid_coverage[None, :, :]
+        # Normalize in place to avoid allocating a second full 4-channel
+        # probability tensor for high-resolution fundus images.
+        np.divide(
+            probability_sum,
+            valid_coverage[None, :, :],
+            out=probability_sum,
+            casting="unsafe",
         )
+        probabilities = probability_sum
 
         # Remove anything outside retinal FOV
         probabilities *= (
