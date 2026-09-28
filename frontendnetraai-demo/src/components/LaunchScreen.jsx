@@ -20,7 +20,7 @@ export default function LaunchScreen({ onComplete }) {
   return (
     <div className={`netra-launch-simple ${leaving ? "leaving" : ""}`}>
       <img
-        src="/netraai-logo.png"
+        src="/netraai-logo.webp"
         alt="NetraAI"
         className="netra-launch-simple-logo"
       />
