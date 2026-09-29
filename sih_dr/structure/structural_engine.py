@@ -20,7 +20,7 @@ class StructuralRetinaEngine:
       It is not presented as clinically validated anatomical segmentation.
     """
 
-    def __init__(self, max_side=1400):
+    def __init__(self, max_side=1000):
         self.max_side = max_side
 
 
@@ -588,10 +588,6 @@ class StructuralRetinaEngine:
             )
         )
 
-        filtered = np.zeros_like(
-            vessels
-        )
-
         min_component = max(
             12,
             int(
@@ -599,24 +595,27 @@ class StructuralRetinaEngine:
             )
         )
 
-        for component_id in range(
-            1,
-            n
-        ):
+        # Vectorized connected-component filtering. The old loop scanned the
+        # full label image once per component, which was extremely expensive
+        # on high-resolution fundus images and created many large temporaries.
+        keep_lookup = np.zeros(
+            n,
+            dtype=np.uint8
+        )
 
-            area = int(
-                stats[
-                    component_id,
-                    cv2.CC_STAT_AREA
-                ]
-            )
+        if n > 1:
+            component_areas = stats[
+                1:,
+                cv2.CC_STAT_AREA
+            ]
 
-            if area >= min_component:
-                filtered[
-                    labels
-                    ==
-                    component_id
-                ] = 255
+            keep_lookup[1:] = np.where(
+                component_areas >= min_component,
+                255,
+                0
+            ).astype(np.uint8)
+
+        filtered = keep_lookup[labels]
 
         retina_pixels = max(
             1,
