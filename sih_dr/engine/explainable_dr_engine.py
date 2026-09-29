@@ -374,11 +374,63 @@ class ExplainableDREngine:
         # 3. LESION INFERENCE
         # -----------------------------------------
 
+        # The Railway production worker is CPU-only and memory-limited.
+        # Keep lesion segmentation high-resolution, but cap very large fundus
+        # images so overlapping-tile inference does not require 100+ model
+        # forwards for a single request.
+        lesion_input = working_image
+        lesion_scale = 1.0
+        lesion_max_side = 1800
+
+        image_h, image_w = working_image.shape[:2]
+
+        if max(image_h, image_w) > lesion_max_side:
+            lesion_scale = lesion_max_side / max(image_h, image_w)
+            lesion_input = cv2.resize(
+                working_image,
+                (
+                    int(round(image_w * lesion_scale)),
+                    int(round(image_h * lesion_scale)),
+                ),
+                interpolation=cv2.INTER_AREA,
+            )
+
         lesion_result = (
             self.lesion_engine.predict(
-                working_image
+                lesion_input
             )
         )
+
+        if lesion_scale < 1.0:
+            inv_scale = 1.0 / lesion_scale
+            area_scale = inv_scale * inv_scale
+
+            lesion_result["masks"] = np.stack(
+                [
+                    cv2.resize(
+                        mask,
+                        (image_w, image_h),
+                        interpolation=cv2.INTER_NEAREST,
+                    )
+                    for mask in lesion_result["masks"]
+                ],
+                axis=0,
+            ).astype(np.uint8, copy=False)
+
+            lesion_result["retina_mask"] = cv2.resize(
+                lesion_result["retina_mask"],
+                (image_w, image_h),
+                interpolation=cv2.INTER_NEAREST,
+            ).astype(np.uint8, copy=False)
+
+            for info in lesion_result["evidence"].values():
+                info["area_px"] = int(round(info["area_px"] * area_scale))
+                for component in info.get("components", []):
+                    component["x"] = round(component["x"] * inv_scale, 1)
+                    component["y"] = round(component["y"] * inv_scale, 1)
+                    component["area_px"] = int(
+                        round(component["area_px"] * area_scale)
+                    )
 
         lesion_overlay = (
             create_lesion_overlay(
