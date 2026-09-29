@@ -1,5 +1,7 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
+import ctypes
+import gc
 import shutil
 import threading
 import uuid
@@ -61,6 +63,22 @@ structure_engine = None
 
 # Prevent two GPU analyses from running simultaneously.
 inference_lock = threading.Lock()
+
+
+
+
+
+def release_process_memory():
+    """Return large temporary NumPy/OpenCV allocations to the OS when possible."""
+    try:
+        gc.collect()
+    except Exception:
+        pass
+
+    try:
+        ctypes.CDLL("libc.so.6").malloc_trim(0)
+    except Exception:
+        pass
 
 
 def artifact_url(path_string):
@@ -515,6 +533,11 @@ def analyze_fundus(
             )
         except Exception:
             pass
+
+        # Large OpenCV/NumPy buffers can otherwise remain resident in glibc's
+        # allocator after a request. Railway only gives this service 1 GB RAM,
+        # so trim the process heap between analyses.
+        release_process_memory()
 
 
 
