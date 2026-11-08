@@ -1,0 +1,47 @@
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PORT=8080
+
+WORKDIR /app
+
+COPY requirements-backend.txt .
+RUN python -m pip install --upgrade pip && \
+    pip install -r requirements-backend.txt
+
+COPY . .
+
+RUN python - <<'PY'
+from pathlib import Path
+from urllib.request import urlopen
+
+files = {
+    Path("checkpoints/sih_dr/grading/global_final.pth"):
+        "https://media.githubusercontent.com/media/Ashish-Ranjan11/ANEYE/main/checkpoints/sih_dr/grading/global_final.pth",
+    Path("checkpoints/sih_dr/lesions/lesion_final.pth"):
+        "https://media.githubusercontent.com/media/Ashish-Ranjan11/ANEYE/main/checkpoints/sih_dr/lesions/lesion_final.pth",
+}
+expected = {
+    Path("checkpoints/sih_dr/grading/global_final.pth"): 16366283,
+    Path("checkpoints/sih_dr/lesions/lesion_final.pth"): 72269153,
+}
+
+for path, url in files.items():
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with urlopen(url, timeout=300) as response, path.open("wb") as out:
+        while True:
+            chunk = response.read(1024 * 1024)
+            if not chunk:
+                break
+            out.write(chunk)
+    size = path.stat().st_size
+    if size != expected[path]:
+        raise RuntimeError(f"{path}: expected {expected[path]} bytes, got {size}")
+    print(f"Materialized {path}: {size} bytes")
+PY
+
+EXPOSE 8080
+
+CMD exec uvicorn backend.sih_api.main:app --host 0.0.0.0 --port "${PORT:-8080}" --workers 1
