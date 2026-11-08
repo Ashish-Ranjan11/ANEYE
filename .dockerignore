@@ -1,0 +1,14 @@
+.git
+.gitignore
+.gitattributes
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/.pytest_cache
+**/.mypy_cache
+**/.DS_Store
+frontendnetraai-demo/node_modules
+frontendnetraai-demo/dist
+results
+tmp
+*.log
